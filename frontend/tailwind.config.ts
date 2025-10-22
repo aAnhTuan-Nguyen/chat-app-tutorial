@@ -81,6 +81,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        custom: {
+          DEFAULT: "hsl(var(--custom))",
+          foreground: "hsl(var(--custom-foreground))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
