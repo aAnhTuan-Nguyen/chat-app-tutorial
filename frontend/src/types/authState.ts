@@ -7,9 +7,11 @@ export type AuthState = {
 }
 
 export type AuthAction = {
+  setAccessToken: (accessToken: string | null) => void
   clearState: () => void
   signIn: (data: UserSignInData) => Promise<void>
   signUp: (data: UserSignUpData) => Promise<void>
   signOut: () => Promise<void>
   fetchMe: () => Promise<void>
+  refreshToken: () => Promise<void>
 }

@@ -9,13 +9,15 @@ export const useAuthStore = create<AuthState & AuthAction>((set, get) => ({
   user: null,
   loading: false,
 
+  setAccessToken: (accessToken: string | null) => set({ accessToken }),
+
   clearState: () => set({ accessToken: null, user: null }),
 
   signIn: async (data: UserSignInData) => {
     set({ loading: true })
     try {
       const { accessToken } = await authService.signIn(data)
-      set({ accessToken })
+      get().setAccessToken(accessToken)
       await get().fetchMe()
       toast.success("Chào mừng bạn quay lại với Moji!")
     } catch (error) {
@@ -57,11 +59,31 @@ export const useAuthStore = create<AuthState & AuthAction>((set, get) => ({
   fetchMe: async () => {
     set({ loading: true })
     try {
-      const response = await authService.fetchMe()
-      set({ user: response.user })
+      const user = await authService.fetchMe()
+      console.log("response:", user)
+
+      set({ user })
     } catch (error) {
       console.error("Lỗi lấy thông tin người dùng:", error)
       toast.error("Lấy thông tin người dùng thất bại.")
+    } finally {
+      set({ loading: false })
+    }
+  },
+
+  refreshToken: async () => {
+    set({ loading: true })
+    const { user, fetchMe, clearState, setAccessToken } = get()
+    try {
+      const accessToken = await authService.refreshToken()
+      setAccessToken(accessToken)
+      if (!user) {
+        await fetchMe()
+      }
+    } catch (error) {
+      console.error("Lỗi làm mới token:", error)
+      toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
+      clearState()
     } finally {
       set({ loading: false })
     }

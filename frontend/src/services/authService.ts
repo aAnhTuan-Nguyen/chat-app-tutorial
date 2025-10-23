@@ -20,6 +20,11 @@ export const authService = {
 
   fetchMe: async () => {
     const response = await api.get("/users/me")
-    return response.data
+    return response.data.user
+  },
+
+  refreshToken: async () => {
+    const response = await api.post("/auth/refresh-token")
+    return response.data.accessToken
   },
 }
