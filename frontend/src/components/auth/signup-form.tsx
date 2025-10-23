@@ -8,10 +8,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAuthStore } from "@/stores/useAuthStore"
 
 const signUpSchema = z
   .object({
@@ -51,11 +52,15 @@ export function SignupForm({
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   })
+  const { signUp } = useAuthStore()
+  const navigate = useNavigate()
 
   // Xử lý khi submit form
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("Form data:", data)
-    // Thực hiện các hành động đăng ký tại đây
+    // console.log("Form data:", data)
+
+    await signUp(data)
+    navigate("/signin")
   }
 
   return (
@@ -210,8 +215,8 @@ export function SignupForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        Khi nhấn đăng ký, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và{" "}
+        <a href="#">Chính sách bảo mật</a>.
       </FieldDescription>
     </div>
   )

@@ -1,17 +1,13 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAuthStore } from "@/stores/useAuthStore"
 
 const signInSchema = z.object({
   username: z
@@ -34,11 +30,15 @@ export function SignInForm({
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   })
+  const { signIn } = useAuthStore()
+  const navigate = useNavigate()
 
   // Xử lý khi submit form
   const onSubmit = async (data: SignInFormData) => {
-    console.log("Form data:", data)
-    // Thực hiện các hành động đăng nhập tại đây
+    // console.log("Form data:", data)
+
+    await signIn(data)
+    navigate("/")
   }
 
   return (
@@ -101,7 +101,7 @@ export function SignInForm({
                   className="w-full hover:scale-[1.02] transition-transform"
                   disabled={isSubmitting}
                 >
-                  Đăng nhậps
+                  Đăng nhập
                 </Button>
               </Field>
 
@@ -123,10 +123,6 @@ export function SignInForm({
           </div>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
     </div>
   )
 }
