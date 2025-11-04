@@ -1,12 +1,6 @@
 import mongoose from "mongoose"
 
-// const sessionSchema = new mongoose.Schema({
-//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-//   createdAt: { type: Date, default: Date.now, expires: "7d" }, // phiên hết hạn sau 7 ngày
-//   userAgent: { type: String }, // thông tin trình duyệt hoặc thiết bị
-//   ipAddress: { type: String }, // địa chỉ IP của người dùng
-// })
-
+// session schema để lưu thông tin phiên đăng nhập
 const sessionSchema = new mongoose.Schema(
   {
     userId: {

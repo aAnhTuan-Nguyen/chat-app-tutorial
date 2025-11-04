@@ -14,8 +14,7 @@ export const authService = {
   },
 
   signOut: async () => {
-    const response = await api.post("/auth/signout")
-    return response.data
+    await api.post("/auth/signout")
   },
 
   fetchMe: async () => {
