@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 
+// user schema để lưu thông tin người dùng
 const userSchema = new mongoose.Schema(
   {
     username: {
