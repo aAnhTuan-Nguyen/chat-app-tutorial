@@ -37,7 +37,7 @@ const lastMessageSchema = new mongoose.Schema(
     _id: { type: String },
     senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     content: { type: String, default: null },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: null },
   },
   { _id: false }
 )
@@ -53,7 +53,6 @@ const conversationSchema = new mongoose.Schema(
     participants: {
       type: [participantsSchema],
       required: true,
-      validate: [(val) => val.length > 0], // phải có ít nhất 1 thành viên
     },
     group: { type: groupSchema },
     lastMessageAt: { type: Date },

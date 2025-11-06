@@ -20,7 +20,9 @@ const friendSchema = new mongoose.Schema(
 // chuẩn hóa dư liệu trước khi lưu
 // chỉ cần lưu một chiều (userId -> friendId)
 friendSchema.pre("save", function (next) {
-  if (this.userId > this.friendId) {
+  const userId = this.userId.toString()
+  const friendId = this.friendId.toString()
+  if (userId > friendId) {
     // nếu userId > friendId thì hoán đổi
     ;[this.userId, this.friendId] = [this.friendId, this.userId]
   }
