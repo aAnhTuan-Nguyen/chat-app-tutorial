@@ -18,11 +18,8 @@ const friendRequestSchema = new mongoose.Schema(
       maxlength: 300,
       trim: true,
     },
-    status: {
-      type: String,
-      enum: ["pending", "accepted", "rejected"],
-      default: "pending",
-    },
+    // thêm status ko cần thiết vì mình có dữ lại để làm gì đâu
+    // với lại xóa đi sau khi chấp nhận hoặc từ chối sẽ gọn hơn cho DB
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

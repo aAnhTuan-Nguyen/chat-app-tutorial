@@ -6,6 +6,7 @@ import userRoute from "./routes/userRoute.js"
 import cookieParser from "cookie-parser"
 import { protectedRoute } from "./middlewares/authMiddleware.js"
 import cors from "cors"
+import friendRouter from "./routes/friendRoute.js"
 
 dotenv.config()
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoute)
 // private routes
 app.use(protectedRoute) // đặt ở đây vì các route sau đều cần xác thực
 app.use("/api/users", userRoute)
+app.use("/api/friends", friendRouter)
 
 connectDB(process.env.MONGODB_CONNECTION_STRING).then(() => {
   app.listen(PORT, () => {
