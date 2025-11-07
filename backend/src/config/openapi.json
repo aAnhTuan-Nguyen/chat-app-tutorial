@@ -1,0 +1,454 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Moji Chat API",
+    "version": "1.0.0",
+    "description": "API Documentation cho ứng dụng chat Moji"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5001/api",
+      "description": "Development - Local"
+    },
+    {
+      "url": "http://localhost:5000/api",
+      "description": "Development - Alternative Port"
+    },
+    {
+      "url": "https://api.moji.com/api",
+      "description": "Production"
+    }
+  ],
+  "security": [{ "BearerAuth": [] }],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Sign Up",
+        "tags": ["auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password",
+                  "email",
+                  "firstName",
+                  "lastName"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "johndoe"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tạo tài khoản thành công"
+          },
+          "400": {
+            "description": "Thiếu thông tin bắt buộc"
+          },
+          "409": {
+            "description": "Username đã được sử dụng"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "Sign In",
+        "tags": ["auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "johndoe"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Đăng nhập thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Đăng nhập thành công"
+                    },
+                    "accessToken": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Thiếu thông tin"
+          },
+          "401": {
+            "description": "Username hoặc password không đúng"
+          }
+        }
+      }
+    },
+    "/auth/signout": {
+      "post": {
+        "summary": "Sign Out",
+        "tags": ["auth"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Đăng xuất thành công"
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "summary": "Refresh Token",
+        "tags": ["auth"],
+        "parameters": [
+          {
+            "name": "Cookie",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token mới"
+          }
+        },
+        "security": [{ "BearerAuth": [] }]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Get My Profile",
+        "tags": ["user"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Thông tin user"
+          }
+        }
+      }
+    },
+    "/friends/requests": {
+      "post": {
+        "summary": "Send Friend Request",
+        "tags": ["friendRequest"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["receiverId"],
+                "properties": {
+                  "receiverId": {
+                    "type": "string",
+                    "example": "673c1234567890abcdef1234"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Gửi lời mời thành công"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get Friend Requests",
+        "tags": ["friendRequest"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Danh sách lời mời"
+          }
+        }
+      }
+    },
+    "/friends/requests/{requestId}/accept": {
+      "post": {
+        "summary": "Accept Friend Request",
+        "tags": ["friendRequest"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chấp nhận thành công"
+          }
+        }
+      }
+    },
+    "/friends/requests/{requestId}/decline": {
+      "post": {
+        "summary": "Decline Friend Request",
+        "tags": ["friendRequest"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Từ chối thành công"
+          }
+        }
+      }
+    },
+    "/friends": {
+      "get": {
+        "summary": "Get All Friends",
+        "tags": ["friendRequest"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Danh sách bạn bè"
+          }
+        }
+      }
+    },
+    "/messages/direct": {
+      "post": {
+        "summary": "Send Direct Message",
+        "tags": ["message"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["recipientId", "content"],
+                "properties": {
+                  "recipientId": {
+                    "type": "string",
+                    "example": "673c1234567890abcdef1234"
+                  },
+                  "content": {
+                    "type": "string",
+                    "example": "Xin chào!"
+                  },
+                  "conversationId": {
+                    "type": "string",
+                    "example": "673c1234567890abcdef5678"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Gửi tin nhắn thành công"
+          }
+        }
+      }
+    },
+    "/messages/group": {
+      "post": {
+        "summary": "Send Group Message",
+        "tags": ["message"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["conversationId", "content"],
+                "properties": {
+                  "conversationId": {
+                    "type": "string",
+                    "example": "673c1234567890abcdef5678"
+                  },
+                  "content": {
+                    "type": "string",
+                    "example": "Hello group!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Gửi tin nhắn thành công"
+          }
+        }
+      }
+    },
+    "/conversations": {
+      "post": {
+        "summary": "Create Conversation",
+        "tags": ["conversation"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["type", "memberIds"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["direct", "group"],
+                    "example": "direct"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Nhóm học tập"
+                  },
+                  "memberIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["673c1234567890abcdef1234"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tạo cuộc trò chuyện thành công"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get Conversations",
+        "tags": ["conversation"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Danh sách cuộc trò chuyện"
+          }
+        }
+      }
+    },
+    "/conversations/{conversationId}/messages": {
+      "get": {
+        "summary": "Get Messages",
+        "tags": ["conversation"],
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "conversationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Danh sách tin nhắn"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    { "name": "auth", "description": "Xác thực người dùng" },
+    { "name": "user", "description": "Quản lý người dùng" },
+    { "name": "friendRequest", "description": "Quản lý bạn bè" },
+    { "name": "message", "description": "Quản lý tin nhắn" },
+    { "name": "conversation", "description": "Quản lý cuộc trò chuyện" }
+  ]
+}

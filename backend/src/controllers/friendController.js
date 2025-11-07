@@ -8,7 +8,7 @@ export const sendFriendRequest = async (req, res) => {
 
     const senderId = req.user._id
 
-    if (senderId === receiverId) {
+    if (senderId.equals(receiverId)) {
       return res
         .status(400)
         .json({ message: "Không thể gửi lời mời kết bạn cho chính mình" })
