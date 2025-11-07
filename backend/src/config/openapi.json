@@ -19,6 +19,7 @@
       "description": "Production"
     }
   ],
+  "security": [{ "BearerAuth": [] }],
   "paths": {
     "/auth/signup": {
       "post": {
