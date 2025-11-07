@@ -93,7 +93,6 @@ export const getConversations = async (req, res) => {
         { path: "lastMessage.senderId", select: "displayName avatarUrl" },
         { path: "seenBy", select: "displayName avatarUrl" },
       ])
-    console.log(conversations)
     const formattedConversations = conversations.map((conv) => {
       const participants = conv.participants.map((p) => ({
         userId: p.userId._id,
@@ -107,8 +106,6 @@ export const getConversations = async (req, res) => {
         participants,
       }
     })
-    console.log(formattedConversations)
-
     res.status(200).json(formattedConversations)
   } catch (error) {
     console.error("Lỗi khi lấy danh sách cuộc trò chuyện:", error)
