@@ -27,7 +27,7 @@ export const checkFriendship = async (req, res, next) => {
     }
 
     // Trường hợp 2: Group chat (nhóm)
-    if (memberIds && memberIds.length > 0) {
+    if (Array.isArray(memberIds) && memberIds.length > 0) {
       for (const memberId of memberIds) {
         if (memberId.toString() === userId) continue
 
@@ -45,6 +45,12 @@ export const checkFriendship = async (req, res, next) => {
       }
 
       return next()
+    }
+
+    if (memberIds) {
+      return res
+        .status(400)
+        .json({ message: "memberIds phải là một mảng và không được rỗng" })
     }
 
     // Không có recipientId hoặc memberIds
