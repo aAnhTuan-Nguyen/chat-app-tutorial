@@ -22,3 +22,17 @@ export type UserSignUpData = {
   firstName: string
   lastName: string
 }
+
+export interface Friend {
+  _id: string
+  username: string
+  displayName: string
+  avatarUrl?: string
+}
+
+export interface FriendRequest {
+  id: string
+  username: string
+  displayName: string
+  avatarUrl?: string
+}
