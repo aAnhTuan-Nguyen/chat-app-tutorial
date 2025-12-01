@@ -6,7 +6,7 @@ type ChatState = {
     string,
     {
       items: Message[]
-      hasMore: boolean
+      hasMore: boolean // infinite scroll
       nextCursor: string | null
     }
   >
@@ -17,6 +17,7 @@ type ChatState = {
 type ChatAction = {
   reset: () => void
   setActiveConversationId: (Id: string | null) => void
+  fetchConversations: () => Promise<void>
 }
 
 export type ChatStore = ChatState & ChatAction

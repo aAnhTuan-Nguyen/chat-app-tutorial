@@ -4,6 +4,7 @@ import { authService } from "@/services/authService"
 import type { UserSignInData, UserSignUpData } from "@/types/user"
 import type { AuthAction, AuthState } from "@/types/authState"
 import { persist } from "zustand/middleware"
+import { useChatStore } from "@/stores/useChatStore"
 
 export const useAuthStore = create<AuthState & AuthAction>()(
   persist(
@@ -19,16 +20,22 @@ export const useAuthStore = create<AuthState & AuthAction>()(
       clearState: () => {
         set({ accessToken: null, user: null })
         localStorage.clear()
+        useChatStore.getState().reset()
       },
 
       signIn: async (data: UserSignInData) => {
         set({ loading: true })
 
         localStorage.clear()
+        useChatStore.getState().reset()
         try {
           const { accessToken } = await authService.signIn(data)
           get().setAccessToken(accessToken)
+
+          // lấy thông tin thội thoại sau khi người dùng đăng nhập
           await get().fetchMe()
+          await useChatStore.getState().fetchConversations()
+
           toast.success("Chào mừng bạn quay lại với Moji!")
         } catch (error) {
           console.error("Lỗi đăng nhập:", error)
@@ -41,8 +48,7 @@ export const useAuthStore = create<AuthState & AuthAction>()(
       signUp: async (data: UserSignUpData) => {
         set({ loading: true })
         try {
-          const response = await authService.signUp(data)
-          set({ accessToken: response.accessToken, user: response.user })
+          await authService.signUp(data)
           toast.success("Đăng ký thành công!")
         } catch (error) {
           console.error("Lỗi đăng ký:", error)
