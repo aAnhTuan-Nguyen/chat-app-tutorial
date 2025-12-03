@@ -19,7 +19,11 @@ type ChatAction = {
   setActiveConversationId: (Id: string | null) => void
   fetchConversations: () => Promise<void>
   fetchMessages: (conversationId: string, cursor?: string) => Promise<void>
-  sendDirectMessage: (recipientId: string, content: string, conversationId?: string) => Promise<void>
+  sendDirectMessage: (
+    recipientId: string,
+    content: string,
+    conversationId?: string
+  ) => Promise<void>
   sendGroupMessage: (conversationId: string, content: string) => Promise<void>
   addConversation: (conversation: Conversation) => void
   addMessage: (conversationId: string, message: Message) => void

@@ -9,7 +9,14 @@ import { cn, formatOnlineTime } from "@/lib/utils"
 import UserAvatar from "@/components/chat/UserAvatar"
 
 const ChatWindowLayout = () => {
-  const { activeConversationId, conversations, message, fetchMessages, sendDirectMessage, sendGroupMessage } = useChatStore()
+  const {
+    activeConversationId,
+    conversations,
+    message,
+    fetchMessages,
+    sendDirectMessage,
+    sendGroupMessage,
+  } = useChatStore()
   const { user } = useAuthStore()
   const [input, setInput] = useState("")
   const [sending, setSending] = useState(false)
@@ -44,7 +51,11 @@ const ChatWindowLayout = () => {
           (p) => p.userId !== user?._id
         )
         if (otherParticipant) {
-          await sendDirectMessage(otherParticipant.userId, input, activeConversationId)
+          await sendDirectMessage(
+            otherParticipant.userId,
+            input,
+            activeConversationId
+          )
         }
       } else {
         await sendGroupMessage(activeConversationId, input)
@@ -134,7 +145,12 @@ const ChatWindowLayout = () => {
                   name={msg.senderId.displayName}
                   avatarUrl={msg.senderId.avatarUrl || undefined}
                 />
-                <div className={cn("flex flex-col", isOwn ? "items-end" : "items-start")}>
+                <div
+                  className={cn(
+                    "flex flex-col",
+                    isOwn ? "items-end" : "items-start"
+                  )}
+                >
                   {!isOwn && (
                     <span className="text-xs text-muted-foreground mb-1">
                       {msg.senderId.displayName}
@@ -143,9 +159,7 @@ const ChatWindowLayout = () => {
                   <Card
                     className={cn(
                       "p-3 max-w-[70%]",
-                      isOwn
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
+                      isOwn ? "bg-primary text-primary-foreground" : "bg-muted"
                     )}
                   >
                     <p className="text-sm whitespace-pre-wrap wrap-break-word">

@@ -52,9 +52,7 @@ export const useChatStore = create<ChatStore>()(
             message: {
               ...state.message,
               [conversationId]: {
-                items: cursor
-                  ? [...existingData.items, ...messages]
-                  : messages,
+                items: cursor ? [...existingData.items, ...messages] : messages,
                 hasMore: !!nextCursor,
                 nextCursor,
               },
@@ -83,7 +81,7 @@ export const useChatStore = create<ChatStore>()(
 
           // Refresh conversations to update last message
           await get().fetchConversations()
-          
+
           toast.success("Đã gửi tin nhắn")
         } catch (error) {
           console.error("Failed to send direct message:", error)
@@ -102,7 +100,7 @@ export const useChatStore = create<ChatStore>()(
 
           // Refresh conversations to update last message
           await get().fetchConversations()
-          
+
           toast.success("Đã gửi tin nhắn")
         } catch (error) {
           console.error("Failed to send group message:", error)

@@ -6,8 +6,12 @@ import UserAvatar from "@/components/chat/UserAvatar"
 import { Check, X } from "lucide-react"
 
 const FriendRequestList = () => {
-  const { receivedRequests, fetchFriendRequests, acceptFriendRequest, declineFriendRequest } =
-    useFriendStore()
+  const {
+    receivedRequests,
+    fetchFriendRequests,
+    acceptFriendRequest,
+    declineFriendRequest,
+  } = useFriendStore()
 
   useEffect(() => {
     fetchFriendRequests()

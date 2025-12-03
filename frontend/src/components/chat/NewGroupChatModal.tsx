@@ -94,9 +94,7 @@ const NewGroupChatModal = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Chọn thành viên ({selectedFriends.length} đã chọn)
-            </Label>
+            <Label>Chọn thành viên ({selectedFriends.length} đã chọn)</Label>
             <div className="space-y-2 max-h-[300px] overflow-y-auto border rounded-lg p-2">
               {friends.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-4">
@@ -131,7 +129,9 @@ const NewGroupChatModal = () => {
 
           <Button
             onClick={handleCreate}
-            disabled={creating || !groupName.trim() || selectedFriends.length < 2}
+            disabled={
+              creating || !groupName.trim() || selectedFriends.length < 2
+            }
             className="w-full"
           >
             {creating ? "Đang tạo..." : "Tạo nhóm"}
