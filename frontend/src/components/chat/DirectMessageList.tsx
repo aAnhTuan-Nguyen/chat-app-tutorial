@@ -1,6 +1,5 @@
 import DirectMessageCard from "@/components/chat/DirectMessageCard"
 import { useChatStore } from "@/stores/useChatStore"
-import React from "react"
 
 const DirectMessageList = () => {
   const { conversations } = useChatStore()
