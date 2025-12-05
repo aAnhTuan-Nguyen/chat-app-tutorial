@@ -12,8 +12,10 @@ export interface ChatState {
   >
   activeConversationId: string | null
   loading: boolean
+  messageLoading: boolean
 
   reset: () => void
   setActiveConversation: (conversationId: string | null) => void
   fetchConversations: () => Promise<void>
+  fetchMessages: (conversationId: string) => Promise<void>
 }

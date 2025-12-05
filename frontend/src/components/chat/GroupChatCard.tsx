@@ -7,8 +7,12 @@ import type { Conversation } from "@/types/chat"
 
 const GroupChatCard = ({ convo }: { convo: Conversation }) => {
   const { user } = useAuthStore()
-  const { activeConversationId, setActiveConversation, messages } =
-    useChatStore()
+  const {
+    activeConversationId,
+    setActiveConversation,
+    messages,
+    fetchMessages,
+  } = useChatStore()
 
   if (!user) return null
   const unreadCount = convo.unreadCount?.[user._id]
@@ -17,7 +21,7 @@ const GroupChatCard = ({ convo }: { convo: Conversation }) => {
   const handleSelectConversation = async (id: string) => {
     setActiveConversation(id)
     if (!messages[id]) {
-      // todo : fetch messages for this conversation
+      await fetchMessages(id)
     }
   }
 

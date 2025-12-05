@@ -9,8 +9,12 @@ import type { Conversation } from "@/types/chat"
 
 const DirectMessageCard = ({ convo }: { convo: Conversation }) => {
   const { user } = useAuthStore()
-  const { activeConversationId, setActiveConversation, messages } =
-    useChatStore()
+  const {
+    activeConversationId,
+    setActiveConversation,
+    messages,
+    fetchMessages,
+  } = useChatStore()
 
   if (!user) return null
   const otherParticipant = convo.participants.find(
@@ -24,7 +28,7 @@ const DirectMessageCard = ({ convo }: { convo: Conversation }) => {
   const handleSelectConversation = async (id: string) => {
     setActiveConversation(id)
     if (!messages[id]) {
-      // todo: fetch messages for this conversation
+      await fetchMessages(id)
     }
   }
 
@@ -53,20 +57,17 @@ const DirectMessageCard = ({ convo }: { convo: Conversation }) => {
         </p>
       }
       leftSection={
-        <>
-          {/* avatar */}
+        <div className="relative">
           <UserAvatar
             name={otherParticipant.displayName ?? ""}
             type="sidebar"
             avatarUrl={otherParticipant.avatarUrl ?? undefined}
           />
-          {/* badge */}
           <StatusBadge status="online" />
-          {/* unread count */}
           {unreadCount && unreadCount > 0 && (
             <UnreadCountBadge unreadCount={unreadCount} />
           )}
-        </>
+        </div>
       }
     />
   )
