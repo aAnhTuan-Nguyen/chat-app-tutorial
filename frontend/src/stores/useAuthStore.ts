@@ -28,6 +28,7 @@ export const useAuthStore = create<AuthState & AuthAction>()(
         try {
           const { accessToken } = await authService.signIn(data)
           get().setAccessToken(accessToken)
+
           await get().fetchMe()
           await useChatStore.getState().fetchConversations()
 
@@ -72,8 +73,6 @@ export const useAuthStore = create<AuthState & AuthAction>()(
         set({ loading: true })
         try {
           const user = await authService.fetchMe()
-          console.log("response:", user)
-
           set({ user })
         } catch (error) {
           console.error("Lỗi lấy thông tin người dùng:", error)

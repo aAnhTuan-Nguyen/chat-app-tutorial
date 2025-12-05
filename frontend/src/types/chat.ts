@@ -1,5 +1,5 @@
 export interface Participant {
-  _id: string
+  userId: string
   displayName: string
   avatarUrl?: string | null
   joinedAt: string
@@ -18,13 +18,13 @@ export interface Group {
 
 export interface LastMessage {
   _id: string
-  content: string
-  createdAt: string
-  sender: {
+  senderId: {
     _id: string
     displayName: string
     avatarUrl?: string | null
   }
+  content: string
+  createdAt: string
 }
 
 export interface Conversation {
