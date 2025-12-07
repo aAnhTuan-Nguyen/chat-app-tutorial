@@ -17,14 +17,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuthStore } from "@/stores/useAuthStore"
-import { Link } from "react-router"
 import type { User } from "@/types/user"
+import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router"
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
   const { signOut } = useAuthStore()
+  const navigate = useNavigate()
   const handleLogout = async () => {
     await signOut()
+    navigate("/signin")
   }
 
   return (
@@ -87,9 +90,13 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut className="text-muted-foreground dark:group-focus:text-accent-foreground!" />
-              <Link to="/signin" onClick={handleLogout} className="w-full">
+              <Button
+                onClick={handleLogout}
+                className="w-full cursor-pointer text-left justify-start p-0"
+                variant="link"
+              >
                 Logout
-              </Link>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -22,7 +22,10 @@ const MessageItem = ({
   const isGroupBreak =
     index === 0 || // tin nhắn đầu tiên trong danh sách
     prev?.senderId !== message.senderId || // người gửi khác nhau
-    (prev && Date.now() - new Date(prev.createdAt).getTime() > 5 * 60 * 1000) // ngắt nhóm nếu cách nhau hơn 5 phút
+    (prev &&
+      new Date(message.createdAt).getTime() -
+        new Date(prev.createdAt).getTime() >
+        5 * 60 * 1000) // ngắt nhóm nếu cách nhau hơn 5 phút
 
   const participant = selectedConvo.participants.find(
     (p: Participant) => p.userId.toString() === message.senderId.toString()
@@ -30,25 +33,31 @@ const MessageItem = ({
   return (
     <div
       className={cn(
-        "flex gap-2 px-4 message-bounce mt-1",
+        "flex gap-2 px-4 message-bounce",
+        isGroupBreak ? "mt-4" : "mt-1",
         message.isOwn ? "justify-end" : "justify-start"
       )}
     >
-      {!message.isOwn && isGroupBreak && (
-        <div className="mt-2">
-          <UserAvatar
-            type="chat"
-            name={participant?.displayName || "Moji"}
-            avatarUrl={participant?.avatarUrl || undefined}
-          />
+      {/* Avatar hoặc spacer */}
+      {!message.isOwn && (
+        <div className="shrink-0">
+          {isGroupBreak ? (
+            <UserAvatar
+              type="chat"
+              name={participant?.displayName || "Moji"}
+              avatarUrl={participant?.avatarUrl || undefined}
+            />
+          ) : (
+            <div className="size-8.5" />
+          )}
         </div>
       )}
 
       {/* Tin nhắn */}
       <div
         className={cn(
-          "max-w-xs lg:max-w-md space-y-1 flex flex-col ",
-          message.isOwn ? "items-end" : "items-start" // Căn phải nội dung của tin nhắn nếu là tin nhắn của mình, ngược lại căn trái
+          "max-w-xs lg:max-w-md space-y-1 flex flex-col",
+          message.isOwn ? "items-end" : "items-start"
         )}
       >
         <Card

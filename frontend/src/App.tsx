@@ -6,11 +6,27 @@ import { Toaster } from "sonner"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { userThemeStore } from "@/stores/useThemeStore"
 import { useEffect } from "react"
+import { useSocketStore } from "@/stores/useSoketStore"
+import { useAuthStore } from "@/stores/useAuthStore"
+import NotFoundPage from "@/pages/NotFoundPage"
 function App() {
-  const { isDark, setTheme } = userThemeStore()
+  const { isDark } = userThemeStore()
+  const { accessToken } = useAuthStore()
+  const { connectSocket, disconnectSocket } = useSocketStore()
+
   useEffect(() => {
-    setTheme(isDark)
-  }, [isDark, setTheme])
+    if (isDark) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [isDark])
+
+  useEffect(() => {
+    if (accessToken) connectSocket()
+
+    return () => disconnectSocket()
+  }, [accessToken, connectSocket, disconnectSocket])
 
   return (
     <>
@@ -30,6 +46,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* 404 not found */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </>

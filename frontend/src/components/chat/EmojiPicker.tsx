@@ -15,7 +15,7 @@ const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const { isDark } = userThemeStore()
 
   return (
-    <Popover of>
+    <Popover>
       <PopoverTrigger asChild>
         <Smile className="size-5 cursor-pointer hover:text-primary transition-smooth" />
       </PopoverTrigger>
