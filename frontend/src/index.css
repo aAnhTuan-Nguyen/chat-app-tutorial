@@ -287,12 +287,42 @@
   .shadow-bubble {
     box-shadow: var(--shadow-bubble);
   }
-  /* Scrollbar styles */
+
+  /* Scrollbar styles - Custom CSS */
   .beautiful-scrollbar {
-    @apply scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-primary/50 scrollbar-track-transparent dark:scrollbar-thumb-primary/30;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.5) transparent;
   }
+
   .beautiful-scrollbar:hover {
-    @apply scrollbar-thumb-primary/70;
+    scrollbar-color: hsl(var(--primary) / 0.7) transparent;
+  }
+
+  .dark .beautiful-scrollbar {
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+  }
+
+  /* Webkit scrollbar */
+  .beautiful-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .beautiful-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .beautiful-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.5);
+    border-radius: 4px;
+  }
+
+  .beautiful-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.7);
+  }
+
+  .dark .beautiful-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
   }
 
   /* Animations */

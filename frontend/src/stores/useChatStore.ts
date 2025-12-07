@@ -55,7 +55,7 @@ export const useChatStore = create<ChatState>()(
 
           const processed = newMessages.map((msg) => ({
             ...msg,
-            isOwnMessage: msg.senderId === user?._id,
+            isOwn: msg.senderId === user?._id,
           }))
 
           set((state: ChatState) => {
@@ -78,6 +78,41 @@ export const useChatStore = create<ChatState>()(
           console.error("Lỗi khi tải tin nhắn:", error)
         } finally {
           set({ messageLoading: false })
+        }
+      },
+      sendDirectMessage: async (recipientId, content, imageUrl) => {
+        try {
+          const { activeConversationId } = get()
+          await chatService.sendDirectMessage(
+            recipientId,
+            content,
+            imageUrl,
+            activeConversationId || undefined
+          )
+
+          set((state) => ({
+            conversations: state.conversations.map((convo) => {
+              return convo._id === activeConversationId
+                ? { ...convo, seenBy: [] }
+                : convo
+            }),
+          }))
+        } catch (error) {
+          console.error("Lỗi khi gửi tin nhắn trực tiếp:", error)
+        }
+      },
+      sendGroupMessage: async (conversationId, content, imageUrl) => {
+        try {
+          await chatService.sendGroupMessage(conversationId, content, imageUrl)
+          set((state) => ({
+            conversations: state.conversations.map((convo) => {
+              return convo._id === conversationId
+                ? { ...convo, seenBy: [] }
+                : convo
+            }),
+          }))
+        } catch (error) {
+          console.error("Lỗi khi gửi tin nhắn nhóm:", error)
         }
       },
     }),
